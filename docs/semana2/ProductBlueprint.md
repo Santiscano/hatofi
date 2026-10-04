@@ -1,6 +1,6 @@
 # PRODUCT BLUEPRINT — HATOFI
 
-**Infraestructura de Inversión y Tokenización de Activos Ganaderos sobre Stellar**
+**Infraestructura de Inversión y Tokenización de Activos Ganaderos sobre Stellar - RWA (Real WORD assets)**
 
 **Entregable Grupal — Semana 2 (Blockchain Builders 101)**
 
