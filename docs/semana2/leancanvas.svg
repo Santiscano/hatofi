@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background:#081c15; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0f3d24" />
+      <stop offset="100%" stop-color="#1b5e34" />
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Encabezado -->
+  <rect x="20" y="20" width="1160" height="70" rx="10" fill="url(#headerGrad)" stroke="#2d6a4f" stroke-width="1.5" />
+  <text x="45" y="62" fill="#52b788" font-size="28" font-weight="900" letter-spacing="1">HatoFi</text>
+  <text x="160" y="60" fill="#ffffff" font-size="18" font-weight="500">| LEAN CANVAS — Modelo de Negocio Ganadero Descentralizado (Stellar / Soroban)</text>
+  <text x="1060" y="60" fill="#74c69d" font-size="14" font-weight="bold">BB101 Módulo 2</text>
+
+  <!-- ESTILOS COMUNES DE TARJETAS -->
+  <!-- Columna 1: Problema (x=20, y=105, w=224, h=450) -->
+  <rect x="20" y="105" width="224" height="450" rx="8" fill="#11291f" stroke="#2d6a4f" stroke-width="1.5" filter="url(#cardShadow)" />
+  <rect x="20" y="105" width="224" height="36" rx="8" fill="#1b4332" />
+  <text x="32" y="129" fill="#74c69d" font-size="14" font-weight="bold">1. PROBLEMA</text>
+  <text x="32" y="165" fill="#e5e7eb" font-size="12" font-weight="600">• Exclusión crediticia:</text>
+  <text x="32" y="183" fill="#9ca3af" font-size="11">Pequeños ganaderos sin capital</text>
+  <text x="32" y="198" fill="#9ca3af" font-size="11">ni acceso a crédito bancario.</text>
+  <text x="32" y="225" fill="#e5e7eb" font-size="12" font-weight="600">• Pradera ociosa:</text>
+  <text x="32" y="243" fill="#9ca3af" font-size="11">Capacidad productiva y forraje</text>
+  <text x="32" y="258" fill="#9ca3af" font-size="11">desaprovechados en campo.</text>
+  <text x="32" y="285" fill="#e5e7eb" font-size="12" font-weight="600">• Desconfianza e informalidad:</text>
+  <text x="32" y="303" fill="#9ca3af" font-size="11">Modelos "al partir" sin soporte,</text>
+  <text x="32" y="318" fill="#9ca3af" font-size="11">opacos y sin liquidación clara.</text>
+  
+  <rect x="30" y="370" width="204" height="170" rx="6" fill="#0d2118" stroke="#1f4e39" />
+  <text x="40" y="392" fill="#52b788" font-size="11" font-weight="bold">Alternativas actuales:</text>
+  <text x="40" y="415" fill="#9ca3af" font-size="10">• Acuerdos verbales "al partir"</text>
+  <text x="40" y="435" fill="#9ca3af" font-size="10">• Prestamistas informales gota a gota</text>
+  <text x="40" y="455" fill="#9ca3af" font-size="10">• Crédito bancario inaccesible</text>
+  <text x="40" y="475" fill="#9ca3af" font-size="10">• Terrenos subutilizados</text>
+
+  <!-- Columna 2 Arriba: Solución (x=254, y=105, w=224, h=220) -->
+  <rect x="254" y="105" width="224" height="220" rx="8" fill="#11291f" stroke="#2d6a4f" stroke-width="1.5" filter="url(#cardShadow)" />
+  <rect x="254" y="105" width="224" height="36" rx="8" fill="#1b4332" />
+  <text x="266" y="129" fill="#74c69d" font-size="14" font-weight="bold">4. SOLUCIÓN</text>
+  <text x="266" y="165" fill="#e5e7eb" font-size="12" font-weight="600">• Vaults de inversión en Stellar:</text>
+  <text x="266" y="182" fill="#9ca3af" font-size="11">Financiamiento colectivo en USDC.</text>
+  <text x="266" y="207" fill="#e5e7eb" font-size="12" font-weight="600">• NFT Bovino (SEP-41):</text>
+  <text x="266" y="224" fill="#9ca3af" font-size="11">Gemelo digital amarrado a arete.</text>
+  <text x="266" y="249" fill="#e5e7eb" font-size="12" font-weight="600">• Smart Contract Profit Splitter:</text>
+  <text x="266" y="266" fill="#9ca3af" font-size="11">Reparto matemático post-subasta.</text>
+
+  <!-- Columna 2 Abajo: Métricas Clave (x=254, y=335, w=224, h=220) -->
+  <rect x="254" y="335" width="224" height="220" rx="8" fill="#11291f" stroke="#2d6a4f" stroke-width="1.5" filter="url(#cardShadow)" />
+  <rect x="254" y="335" width="224" height="36" rx="8" fill="#1b4332" />
+  <text x="266" y="359" fill="#74c69d" font-size="14" font-weight="bold">8. MÉTRICAS CLAVE</text>
+  <text x="266" y="395" fill="#e5e7eb" font-size="12" font-weight="600">• TVL en Vaults (USDC/XLM)</text>
+  <text x="266" y="420" fill="#e5e7eb" font-size="12" font-weight="600">• Bovinos tokenizados / fincas</text>
+  <text x="266" y="445" fill="#e5e7eb" font-size="12" font-weight="600">• Kilos ganados por lote (GMD)</text>
+  <text x="266" y="470" fill="#e5e7eb" font-size="12" font-weight="600">• Margen distribuido a tiempo (%)</text>
+  <text x="266" y="495" fill="#e5e7eb" font-size="12" font-weight="600">• Tasa de default o siniestro (%)</text>
+
+  <!-- Columna 3 Centro: Propuesta de Valor Única (x=488, y=105, w=224, h=450) -->
+  <rect x="488" y="105" width="224" height="450" rx="8" fill="#0b3820" stroke="#40916c" stroke-width="2" filter="url(#cardShadow)" />
+  <rect x="488" y="105" width="224" height="36" rx="8" fill="#2d6a4f" />
+  <text x="500" y="129" fill="#d8f3dc" font-size="13" font-weight="bold">3. PROPUESTA DE VALOR</text>
+  
+  <rect x="498" y="155" width="204" height="155" rx="6" fill="#114b2d" stroke="#52b788" />
+  <text x="508" y="178" fill="#52b788" font-size="11" font-weight="bold">Declaración central:</text>
+  <text x="508" y="202" fill="#ffffff" font-size="12" font-weight="bold">"Conectamos capital de</text>
+  <text x="508" y="220" fill="#ffffff" font-size="12" font-weight="bold">inversión con la tierra</text>
+  <text x="508" y="238" fill="#ffffff" font-size="12" font-weight="bold">del campesino: ceba de</text>
+  <text x="508" y="256" fill="#ffffff" font-size="12" font-weight="bold">ganado financiada en Stellar</text>
+  <text x="508" y="274" fill="#ffffff" font-size="12" font-weight="bold">y liquidada en Soroban."</text>
+
+  <text x="500" y="340" fill="#74c69d" font-size="12" font-weight="bold">Concepto de alto nivel:</text>
+  <text x="500" y="360" fill="#e5e7eb" font-size="11">Financiamiento e inversión</text>
+  <text x="500" y="375" fill="#e5e7eb" font-size="11">descentralizada de activos reales</text>
+  <text x="500" y="390" fill="#e5e7eb" font-size="11">(RWA) sin bancos comisionistas.</text>
+
+  <rect x="498" y="420" width="204" height="115" rx="6" fill="#114b2d" />
+  <text x="508" y="442" fill="#52b788" font-size="11" font-weight="bold">Para el Ganadero:</text>
+  <text x="508" y="460" fill="#d8f3dc" font-size="11">Cero deuda, pago por kilo.</text>
+  <text x="508" y="485" fill="#52b788" font-size="11" font-weight="bold">Para el Inversionista:</text>
+  <text x="508" y="503" fill="#d8f3dc" font-size="11">Activo tangible auditable.</text>
+
+  <!-- Columna 4 Arriba: Ventaja Diferencial (x=722, y=105, w=224, h=220) -->
+  <rect x="722" y="105" width="224" height="220" rx="8" fill="#11291f" stroke="#2d6a4f" stroke-width="1.5" filter="url(#cardShadow)" />
+  <rect x="722" y="105" width="224" height="36" rx="8" fill="#1b4332" />
+  <text x="734" y="129" fill="#74c69d" font-size="13" font-weight="bold">9. VENTAJA DIFERENCIAL</text>
+  <text x="734" y="165" fill="#e5e7eb" font-size="12" font-weight="600">• Oráculo de Subasta Neutral:</text>
+  <text x="734" y="182" fill="#9ca3af" font-size="11">Báscula pública certificada al</text>
+  <text x="734" y="197" fill="#9ca3af" font-size="11">entrar y salir del ciclo.</text>
+  <text x="734" y="222" fill="#e5e7eb" font-size="12" font-weight="600">• Cero fricción cripto:</text>
+  <text x="734" y="239" fill="#9ca3af" font-size="11">Billetera embebida y custodia</text>
+  <text x="734" y="254" fill="#9ca3af" font-size="11">diseñada para el entorno rural.</text>
+
+  <!-- Columna 4 Abajo: Canales (x=722, y=335, w=224, h=220) -->
+  <rect x="722" y="335" width="224" height="220" rx="8" fill="#11291f" stroke="#2d6a4f" stroke-width="1.5" filter="url(#cardShadow)" />
+  <rect x="722" y="335" width="224" height="36" rx="8" fill="#1b4332" />
+  <text x="734" y="359" fill="#74c69d" font-size="14" font-weight="bold">5. CANALES</text>
+  <text x="734" y="395" fill="#e5e7eb" font-size="12" font-weight="600">• Subastas ganaderas aliadas:</text>
+  <text x="734" y="412" fill="#9ca3af" font-size="11">Puntos de captación y pesaje.</text>
+  <text x="734" y="437" fill="#e5e7eb" font-size="12" font-weight="600">• Cooperativas pecuarias locales:</text>
+  <text x="734" y="454" fill="#9ca3af" font-size="11">Afiliación de fincas de ceba.</text>
+  <text x="734" y="479" fill="#e5e7eb" font-size="12" font-weight="600">• Plataforma Web / DApp HatoFi:</text>
+  <text x="734" y="496" fill="#9ca3af" font-size="11">Catálogo de inversión y dashboard.</text>
+
+  <!-- Columna 5: Segmento de Clientes (x=956, y=105, w=224, h=450) -->
+  <rect x="956" y="105" width="224" height="450" rx="8" fill="#11291f" stroke="#2d6a4f" stroke-width="1.5" filter="url(#cardShadow)" />
+  <rect x="956" y="105" width="224" height="36" rx="8" fill="#1b4332" />
+  <text x="968" y="129" fill="#74c69d" font-size="13" font-weight="bold">2. SEGMENTO CLIENTES</text>
+  <text x="968" y="165" fill="#52b788" font-size="12" font-weight="bold">• Productores Rurales:</text>
+  <text x="968" y="183" fill="#e5e7eb" font-size="11">Pequeños y medianos ganaderos</text>
+  <text x="968" y="198" fill="#9ca3af" font-size="11">con fincas de pastoreo y forraje</text>
+  <text x="968" y="213" fill="#9ca3af" font-size="11">sin capital para poblar el hato.</text>
+  
+  <text x="968" y="248" fill="#52b788" font-size="12" font-weight="bold">• Inversionistas (RWA):</text>
+  <text x="968" y="266" fill="#e5e7eb" font-size="11">Inversores urbanos y Web3 que</text>
+  <text x="968" y="281" fill="#9ca3af" font-size="11">buscan rentabilidad respaldada</text>
+  <text x="968" y="296" fill="#9ca3af" font-size="11">en la economía real del agro.</text>
+
+  <rect x="966" y="370" width="204" height="170" rx="6" fill="#0d2118" stroke="#1f4e39" />
+  <text x="976" y="392" fill="#52b788" font-size="11" font-weight="bold">Early Adopters:</text>
+  <text x="976" y="415" fill="#9ca3af" font-size="10">• Ganaderos asociados a comités</text>
+  <text x="976" y="430" fill="#9ca3af" font-size="10">  locales en Antioquia.</text>
+  <text x="976" y="455" fill="#9ca3af" font-size="10">• Inversionistas fintech locales</text>
+  <text x="976" y="470" fill="#9ca3af" font-size="10">  interesados en microcrédito</text>
+  <text x="976" y="485" fill="#9ca3af" font-size="10">  y activos pecuarios.</text>
+
+  <!-- Fila Inferior 1: Estructura de Costos (x=20, y=565, w=575, h=215) -->
+  <rect x="20" y="565" width="575" height="215" rx="8" fill="#11291f" stroke="#2d6a4f" stroke-width="1.5" filter="url(#cardShadow)" />
+  <rect x="20" y="565" width="575" height="36" rx="8" fill="#1b4332" />
+  <text x="32" y="589" fill="#74c69d" font-size="14" font-weight="bold">7. ESTRUCTURA DE COSTOS</text>
+  <text x="32" y="625" fill="#e5e7eb" font-size="12">• Costos de desarrollo y auditoría de contratos en Soroban / Rust y frontend Web3</text>
+  <text x="32" y="650" fill="#e5e7eb" font-size="12">• Comisiones de red e infraestructura Stellar (mínimas por diseño: ~0.00001 XLM)</text>
+  <text x="32" y="675" fill="#e5e7eb" font-size="12">• Gastos de inspección veterinaria, aretado oficial e integración técnica con básculas</text>
+  <text x="32" y="700" fill="#e5e7eb" font-size="12">• Costos operativos de onboarding a ganaderos y soporte en territorio rural</text>
+  <text x="32" y="725" fill="#e5e7eb" font-size="12">• Soporte legal y estructuración de contratos de cuentas en participación</text>
+
+  <!-- Fila Inferior 2: Flujo de Ingresos (x=605, y=565, w=575, h=215) -->
+  <rect x="605" y="565" width="575" height="215" rx="8" fill="#11291f" stroke="#2d6a4f" stroke-width="1.5" filter="url(#cardShadow)" />
+  <rect x="605" y="565" width="575" height="36" rx="8" fill="#1b4332" />
+  <text x="617" y="589" fill="#74c69d" font-size="14" font-weight="bold">6. FLUJO DE INGRESOS</text>
+  <text x="617" y="625" fill="#e5e7eb" font-size="12">• Comisión de originación tecnológica por lote estructurado (1% a 2% del vault)</text>
+  <text x="617" y="650" fill="#e5e7eb" font-size="12">• Comisión de éxito (Success Fee): 2% al 4% sobre el margen de ganancia líquida del lote</text>
+  <text x="617" y="675" fill="#e5e7eb" font-size="12">• Margen por servicios de datos de trazabilidad y certificación histórica del bovino</text>
+  <text x="617" y="700" fill="#e5e7eb" font-size="12">• Spread operativo en servicios de rampa / anchor local para dispersión de utilidades</text>
+</svg>
