@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
-type Role = "inversionista" | "ganadero";
+type Role = "admin" | "developer" | "inversionista" | "ganadero";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -13,12 +13,11 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
-  // Determinar rol por la ruta activa
-  const isGanadero = pathname.includes("my-farm");
-  const role: Role = isGanadero ? "ganadero" : "inversionista";
+  // La sesión identifica al usuario; la ruta solo evita un cambio visual antes de leerla.
+  const [role, setRole] = useState<Role | null>(null);
 
-  const [userName, setUserName] = useState(isGanadero ? "Carlos Mendoza" : "Mauricio Echeverry");
-  const [userAccount, setUserAccount] = useState(isGanadero ? "Hacienda La Palmira" : "0x8F2d...c3Ea");
+  const [userName, setUserName] = useState("");
+  const [userAccount, setUserAccount] = useState("");
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -26,11 +25,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         const session = localStorage.getItem("hatofi_session");
         if (session) {
           const parsed = JSON.parse(session);
+          if (parsed.role) setRole(parsed.role);
           if (parsed.name) setUserName(parsed.name);
           if (parsed.account) setUserAccount(parsed.account);
         } else {
-          setUserName(isGanadero ? "Carlos Mendoza" : "Mauricio Echeverry");
-          setUserAccount(isGanadero ? "Hacienda La Palmira" : "0x8F2d...c3Ea");
+          // cerrar sesión si no hay sesión almacenada
+          localStorage.removeItem("hatofi_session");
+          localStorage.removeItem("hatofi_access_token");
+          router.push("/login");
         }
       } catch {
         // Mantener los valores iniciales si la sesión almacenada no es válida.
@@ -39,7 +41,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     }, 0);
 
     return () => window.clearTimeout(timeoutId);
-  }, [isGanadero]);
+  }, [pathname]);
 
   const handleLogout = () => {
     try {
@@ -115,7 +117,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </svg>
       ),
     },
-  ] : [
+  ] : role === "ganadero" ? [
     {
       href: "/dashboard/my-farm",
       label: "Mis Fincas",
@@ -140,7 +142,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     {
       href: "#solicitar-lote",
       label: "Solicitar Lote Ceba",
-      available: true,
+      available: false,
       action: () => {
         window.dispatchEvent(new CustomEvent("open-new-batch-modal"));
       },
@@ -154,7 +156,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     {
       href: "#certificado-ica",
       label: "Certificado ICA",
-      available: true,
+      available: false,
       action: () => {
         window.dispatchEvent(new CustomEvent("download-ica-cert"));
       },
@@ -188,7 +190,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </svg>
       ),
     },
-  ];
+  ] : [];
 
   return (
     <div className="min-h-screen bg-[#F4F7F5] flex flex-col antialiased text-[#0D1F1B]">

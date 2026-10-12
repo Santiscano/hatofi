@@ -1,157 +1,31 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
-
-interface Bovine {
-  id: string;
-  tag: string;
-  rfid: string;
-  breed: string;
-  stage: string;
-  initialWeight: number;
-  currentWeight: number;
-  gainNet: number;
-  gainBiweekly: number;
-  health: string;
-}
-
-const initialCattle: Bovine[] = [
-  {
-    id: "01",
-    tag: "#ICA-001",
-    rfid: "982.000.412.981",
-    breed: "Brahman x Angus",
-    stage: "24 meses • Mes 8 de 10",
-    initialWeight: 210,
-    currentWeight: 486.4,
-    gainNet: 276.4,
-    gainBiweekly: 14.2,
-    health: "Vacunado / Óptimo",
-  },
-  {
-    id: "02",
-    tag: "#ICA-002",
-    rfid: "982.000.412.982",
-    breed: "Nelore Comercial",
-    stage: "23 meses • Mes 8 de 10",
-    initialWeight: 205,
-    currentWeight: 478.0,
-    gainNet: 273.0,
-    gainBiweekly: 12.8,
-    health: "Vacunado / Óptimo",
-  },
-  {
-    id: "03",
-    tag: "#ICA-003",
-    rfid: "982.000.412.983",
-    breed: "Brahman Puro",
-    stage: "25 meses • Mes 8 de 10",
-    initialWeight: 220,
-    currentWeight: 492.5,
-    gainNet: 272.5,
-    gainBiweekly: 15.5,
-    health: "Vacunado / Óptimo",
-  },
-  {
-    id: "04",
-    tag: "#ICA-004",
-    rfid: "982.000.412.984",
-    breed: "Brangus Colorado",
-    stage: "24 meses • Mes 8 de 10",
-    initialWeight: 215,
-    currentWeight: 489.1,
-    gainNet: 274.1,
-    gainBiweekly: 13.6,
-    health: "Vacunado / Óptimo",
-  },
-];
+import { useMyFarm } from "./hook/use-my-farm";
 
 export default function MyFarmPage() {
-  const [cattleList, setCattleList] = useState<Bovine[]>(initialCattle);
-  const [selectedFilter, setSelectedFilter] = useState<"all" | "optimal" | "review">("all");
-  const [weightModalOpen, setWeightModalOpen] = useState(false);
-  const [selectedBovine, setSelectedBovine] = useState<Bovine | null>(null);
-  const [newWeightInput, setNewWeightInput] = useState<string>("");
-  const [toastMessage, setToastMessage] = useState<string>("");
-  const [newBatchModalOpen, setNewBatchModalOpen] = useState(false);
-  const [addBovineModalOpen, setAddBovineModalOpen] = useState(false);
-  const [newTag, setNewTag] = useState("#ICA-005");
-  const [newBreed, setNewBreed] = useState("Brahman x Simmental");
-  const [newWeight, setNewWeight] = useState("225");
-
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(""), 4000);
-  };
-
-  const filteredCattle = cattleList.filter((b) => {
-    if (selectedFilter === "optimal") return b.currentWeight >= 480;
-    if (selectedFilter === "review") return b.currentWeight < 480;
-    return true;
-  });
-
-  const handleOpenWeightModal = (bovine: Bovine) => {
-    setSelectedBovine(bovine);
-    setNewWeightInput((bovine.currentWeight + 2.5).toFixed(1));
-    setWeightModalOpen(true);
-  };
-
-  const handleSaveWeight = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedBovine) return;
-    const val = parseFloat(newWeightInput);
-    if (isNaN(val) || val <= 0) return;
-
-    setCattleList((prev) =>
-      prev.map((b) => {
-        if (b.id === selectedBovine.id) {
-          const diff = val - b.currentWeight;
-          return {
-            ...b,
-            currentWeight: val,
-            gainNet: parseFloat((b.gainNet + diff).toFixed(1)),
-            gainBiweekly: parseFloat((b.gainBiweekly + diff).toFixed(1)),
-          };
-        }
-        return b;
-      })
-    );
-
-    setWeightModalOpen(false);
-    showToast(`✓ Pesaje telemétrico registrado para ${selectedBovine.tag}: ${val} kg.`);
-  };
-
-  const handleAddBovine = (e: React.FormEvent) => {
-    e.preventDefault();
-    const w = parseFloat(newWeight) || 220;
-    const newBovine: Bovine = {
-      id: String(cattleList.length + 1).padStart(2, "0"),
-      tag: newTag,
-      rfid: `982.000.412.98${cattleList.length + 5}`,
-      breed: newBreed,
-      stage: "22 meses • Mes 1 de 10",
-      initialWeight: w,
-      currentWeight: w,
-      gainNet: 0,
-      gainBiweekly: 0,
-      health: "Vacunado / Óptimo",
-    };
-    setCattleList([...cattleList, newBovine]);
-    setAddBovineModalOpen(false);
-    showToast(`✓ Bovino ${newTag} incorporado con arete RFID a la manga.`);
-  };
-
-  useEffect(() => {
-    const handleDownloadCert = () => showToast("Descargando Certificado Oficial ICA SIGMA #84920-CO en PDF...");
-    const handleNewBatch = () => setNewBatchModalOpen(true);
-    window.addEventListener("download-ica-cert", handleDownloadCert);
-    window.addEventListener("open-new-batch-modal", handleNewBatch);
-    return () => {
-      window.removeEventListener("download-ica-cert", handleDownloadCert);
-      window.removeEventListener("open-new-batch-modal", handleNewBatch);
-    };
-  }, []);
+  const {
+    weightModalOpen,
+    setWeightModalOpen,
+    selectedBovine,
+    newWeightInput,
+    setNewWeightInput,
+    toastMessage,
+    setToastMessage,
+    newBatchModalOpen,
+    setNewBatchModalOpen,
+    addBovineModalOpen,
+    setAddBovineModalOpen,
+    newTag,
+    setNewTag,
+    newBreed,
+    setNewBreed,
+    newWeight,
+    setNewWeight,
+    showToast,
+    handleSaveWeight,
+    handleAddBovine,
+  } = useMyFarm();
 
   return (
     <div className="flex flex-col gap-6 w-full">
