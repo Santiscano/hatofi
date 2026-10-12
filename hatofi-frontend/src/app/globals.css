@@ -89,7 +89,7 @@ h2 { margin: 0 0 3px; font-size: 18px; letter-spacing: -.3px; }
 .activity-row time { margin-top: 0; }
 .auth-page { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; background: #f7f7fb; }
 .auth-brand { display: flex; flex-direction: column; justify-content: center; padding: 10vw; background: #063b32; color: #fff; }
-.auth-brand img { width: 190px; height: auto; object-fit: contain; object-position: left; filter: brightness(0) invert(1); margin-bottom: 55px; }
+.auth-brand img { width: 190px; height: auto; object-fit: contain; object-position: left; margin-bottom: 45px; }
 .auth-brand p { color: #b6d5c5; font-size: 28px; line-height: 1.14; letter-spacing: -1px; }
 .auth-brand p strong { color: #8df0b2; }
 .auth-card { display: flex; align-items: center; justify-content: center; padding: 30px; }
