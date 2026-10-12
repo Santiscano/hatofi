@@ -61,6 +61,20 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       ),
     },
     {
+      href: "#simular",
+      label: "Simulador RWA",
+      available: true,
+      action: () => {
+        window.dispatchEvent(new CustomEvent("open-simulate-modal"));
+      },
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 3v18h18" />
+          <path d="m19 9-5 5-4-4-3 3" />
+        </svg>
+      ),
+    },
+    {
       href: "#liquidaciones",
       label: "Liquidaciones RWA",
       available: false,
@@ -107,6 +121,45 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       ),
     },
     {
+      href: "/dashboard/cattle",
+      label: "Inventario Bovino",
+      available: true,
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+        </svg>
+      ),
+    },
+    {
+      href: "#solicitar-lote",
+      label: "Solicitar Lote Ceba",
+      available: true,
+      action: () => {
+        window.dispatchEvent(new CustomEvent("open-new-batch-modal"));
+      },
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      ),
+    },
+    {
+      href: "#certificado-ica",
+      label: "Certificado ICA",
+      available: true,
+      action: () => {
+        window.dispatchEvent(new CustomEvent("download-ica-cert"));
+      },
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="m9 12 2 2 4-4" />
+        </svg>
+      ),
+    },
+    {
       href: "#bascula",
       label: "Báscula IoT & Pesaje",
       available: false,
@@ -126,17 +179,6 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect width="20" height="14" x="2" y="5" rx="2" />
           <line x1="2" x2="22" y1="10" y2="10" />
-        </svg>
-      ),
-    },
-    {
-      href: "#reportes-ica",
-      label: "Reportes ICA",
-      available: false,
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-          <path d="m9 12 2 2 4-4" />
         </svg>
       ),
     },
@@ -182,20 +224,33 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           <nav className="flex flex-col gap-1.5">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
-              return item.available ? (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                    isActive
-                      ? "bg-[#E8F5E9] text-[#006244] shadow-sm"
-                      : "text-[#5A6963] hover:bg-[#F0F4F2] hover:text-[#0D1F1B]"
-                  }`}
-                >
-                  <span className={isActive ? "text-[#006244]" : "text-[#84958E]"}>{item.icon}</span>
-                  <span>{item.label}</span>
-                </Link>
-              ) : (
+              if (item.available) {
+                return item.action ? (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={item.action}
+                    className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#5A6963] hover:bg-[#F0F4F2] hover:text-[#0D1F1B] transition-all text-left cursor-pointer"
+                  >
+                    <span className="text-[#84958E]">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </button>
+                ) : (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                      isActive
+                        ? "bg-[#E8F5E9] text-[#006244] shadow-sm"
+                        : "text-[#5A6963] hover:bg-[#F0F4F2] hover:text-[#0D1F1B]"
+                    }`}
+                  >
+                    <span className={isActive ? "text-[#006244]" : "text-[#84958E]"}>{item.icon}</span>
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              }
+              return (
                 <button
                   key={item.label}
                   type="button"
@@ -371,59 +426,155 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </div>
         )}
 
-        {/* MOBILE MENU DRAWER */}
+        {/* MOBILE OFF-CANVAS DRAWER */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white border-b border-gray-200 p-4 space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-gray-100">
-              <span className="text-xs font-bold text-[#063B32]">Menú ({role === "inversionista" ? "Inversor" : "Ganadero"})</span>
-              <button onClick={() => setMobileMenuOpen(false)} className="text-gray-500 text-sm font-bold">✕</button>
-            </div>
-            <div className="flex flex-col gap-1">
-              {navItems.map((item) => (
-                item.available ? (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-bold ${
-                      pathname === item.href ? "bg-[#E8F5E9] text-[#006244]" : "text-gray-600"
-                    }`}
-                  >
-                    {item.icon}
-                    <span>{item.label}</span>
-                  </Link>
-                ) : (
-                  <button
-                    key={item.label}
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      setComingSoonFeature(item.label);
-                    }}
-                    className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-gray-400 hover:bg-gray-50 text-left"
-                  >
-                    <div className="flex items-center gap-3">
-                      {item.icon}
-                      <span>{item.label}</span>
+          <div className="fixed inset-0 z-50 lg:hidden">
+            {/* Backdrop con Blur */}
+            <div
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+            ></div>
+
+            {/* Panel Deslizante Lateral */}
+            <div className="fixed inset-y-0 left-0 w-72 max-w-[85vw] bg-white shadow-2xl flex flex-col justify-between p-6 z-50 animate-slide-right">
+              <div className="flex flex-col gap-6">
+                
+                {/* Brand Header */}
+                <div className="flex items-center justify-between pb-4 border-b border-[#EEF2F0]">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-white border border-[#E2E8E5] p-1 flex items-center justify-center shadow-sm">
+                      <Image
+                        src="/brand/hatofi-icon.svg"
+                        alt="HatoFi"
+                        width={28}
+                        height={28}
+                        priority
+                        className="w-full h-full object-contain"
+                      />
                     </div>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 font-bold uppercase">
-                      Pronto
-                    </span>
+                    <div>
+                      <span className="font-extrabold text-sm text-[#063B32] block leading-tight">HatoFi</span>
+                      <span className="text-[9px] font-bold tracking-widest text-[#7C8B85] uppercase block">
+                        {role === "inversionista" ? "Pecuaria RWA" : "Ganadería RWA"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
                   </button>
-                )
-              ))}
+                </div>
+
+                {/* Role Tag */}
+                <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#E8F3EE] text-[#006244] text-xs font-bold border border-[#CCE3D8]">
+                  <span>Perfil Activo:</span>
+                  <span className="uppercase text-[11px]">{role === "inversionista" ? "Inversor" : "Ganadero"}</span>
+                </div>
+
+                {/* Nav Items */}
+                <nav className="flex flex-col gap-1.5">
+                  {navItems.map((item) => {
+                    if (item.available) {
+                      return item.action ? (
+                        <button
+                          key={item.label}
+                          type="button"
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            item.action();
+                          }}
+                          className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#5A6963] hover:bg-[#F0F4F2] hover:text-[#0D1F1B] transition-all text-left"
+                        >
+                          <span className="text-[#84958E]">{item.icon}</span>
+                          <span>{item.label}</span>
+                        </button>
+                      ) : (
+                        <Link
+                          key={item.label}
+                          href={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                            pathname === item.href
+                              ? "bg-[#E8F5E9] text-[#006244] shadow-sm"
+                              : "text-[#5A6963] hover:bg-[#F0F4F2] hover:text-[#0D1F1B]"
+                          }`}
+                        >
+                          <span className={pathname === item.href ? "text-[#006244]" : "text-[#84958E]"}>{item.icon}</span>
+                          <span>{item.label}</span>
+                        </Link>
+                      );
+                    }
+                    return (
+                      <button
+                        key={item.label}
+                        type="button"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setComingSoonFeature(item.label);
+                        }}
+                        className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-[#7A8A84] hover:bg-[#F0F4F2] hover:text-[#0D1F1B] transition-colors text-left cursor-pointer group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-[#9CA9A3] group-hover:text-[#5A6963]">{item.icon}</span>
+                          <span>{item.label}</span>
+                        </div>
+                        <span className="text-[9px] font-semibold tracking-wide px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 uppercase border border-gray-200">
+                          Pronto
+                        </span>
+                      </button>
+                    );
+                  })}
+                </nav>
+              </div>
+
+              {/* Drawer Footer */}
+              <div className="flex flex-col gap-3 pt-4 border-t border-[#EEF2F0]">
+                {/* Network */}
+                <div className="flex items-center justify-between px-3 py-1.5 rounded-full bg-[#F0F4F2] text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
+                    <span className="text-[11px] font-semibold text-[#3D4D47]">
+                      {role === "ganadero" ? "ICA SIGMA Conectado" : "Stellar Mainnet"}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-bold text-[#059669]">Online</span>
+                </div>
+
+                {/* User Info & Logout */}
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#F0F4F2] border border-[#E2E8E5]">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-8 h-8 rounded-full bg-[#006244] text-white flex items-center justify-center font-bold text-xs shrink-0">
+                      {userName.charAt(0) || "U"}
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-bold text-[#0D1F1B] truncate block">{userName}</span>
+                      <span className="text-[10px] text-[#71807A] truncate block">{userAccount}</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    title="Cerrar sesión"
+                    className="p-1.5 rounded-lg text-[#84958E] hover:text-[#DC2626] hover:bg-white transition-colors"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                      <polyline points="16 17 21 12 16 7" />
+                      <line x1="21" x2="9" y1="12" y2="12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
-            <button
-              onClick={handleLogout}
-              className="w-full py-2 px-3 text-xs font-bold text-rose-600 bg-rose-50 rounded-lg flex items-center justify-center gap-2"
-            >
-              Cerrar Sesión
-            </button>
           </div>
         )}
 
         {/* CONTENIDO DE LA PÁGINA */}
-        <main className="flex-1 w-full max-w-[1440px] mx-auto p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 w-full max-w-[1440px] mx-auto p-3 sm:p-5 md:p-6 lg:p-8">
           {children}
         </main>
       </div>

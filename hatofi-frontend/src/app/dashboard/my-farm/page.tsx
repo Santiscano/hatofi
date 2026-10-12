@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Bovine {
   id: string;
@@ -142,6 +142,17 @@ export default function MyFarmPage() {
     showToast(`✓ Bovino ${newTag} incorporado con arete RFID a la manga.`);
   };
 
+  useEffect(() => {
+    const handleDownloadCert = () => showToast("Descargando Certificado Oficial ICA SIGMA #84920-CO en PDF...");
+    const handleNewBatch = () => setNewBatchModalOpen(true);
+    window.addEventListener("download-ica-cert", handleDownloadCert);
+    window.addEventListener("open-new-batch-modal", handleNewBatch);
+    return () => {
+      window.removeEventListener("download-ica-cert", handleDownloadCert);
+      window.removeEventListener("open-new-batch-modal", handleNewBatch);
+    };
+  }, []);
+
   return (
     <div className="flex flex-col gap-6 w-full">
       
@@ -156,45 +167,19 @@ export default function MyFarmPage() {
       )}
 
       {/* Top Breadcrumb & Metadata Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div className="flex flex-col gap-1.5 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8F3EE] text-[#006244] text-xs font-bold w-fit border border-[#CCE3D8]">
-            <span className="w-2 h-2 rounded-full bg-[#10B981]"></span>
-            <span>Certificado ICA #84920-CO • Ganadería Sostenible Silvopastoril</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0D1F1B] tracking-tight">
-            Gestión Operativa de Hacienda La Palmira
-          </h1>
-          <p className="text-xs sm:text-sm text-[#5D6B66] leading-relaxed">
-            Monitoreo biológico de terneros de ceba, sincronización telemétrica de báscula IoT y liquidación de ganancias por biomasa generada en Montería, Córdoba.
-          </p>
+      <div className="flex flex-col gap-1.5 max-w-3xl">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8F3EE] text-[#006244] text-xs font-bold w-fit border border-[#CCE3D8]">
+          <span className="w-2 h-2 rounded-full bg-[#10B981]"></span>
+          <span>Certificado ICA #84920-CO • Ganadería Sostenible Silvopastoril</span>
         </div>
-
-        {/* Quick Actions Header */}
-        <div className="flex flex-wrap items-center gap-2.5 self-start lg:self-center shrink-0">
-          <button
-            type="button"
-            onClick={() => showToast("Descargando Certificado Oficial ICA SIGMA en PDF...")}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#D5DDD8] text-[#24332D] hover:bg-[#F4F7F5] transition-all shadow-sm text-xs font-bold cursor-pointer"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#006244]">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" />
-            </svg>
-            <span>Descargar Certificado ICA</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setNewBatchModalOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#063B32] hover:bg-[#042822] text-white transition-all shadow-sm text-xs font-bold cursor-pointer"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" x2="12" y1="5" y2="19" /><line x1="5" x2="19" y1="12" y2="12" />
-            </svg>
-            <span>Solicitar Nuevo Lote de Ceba</span>
-          </button>
-        </div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0D1F1B] tracking-tight">
+          Gestión Operativa de Hacienda La Palmira
+        </h1>
+        <p className="text-xs sm:text-sm text-[#5D6B66] leading-relaxed">
+          Monitoreo biológico de terneros de ceba, sincronización telemétrica de báscula IoT y liquidación de ganancias por biomasa generada en Montería, Córdoba.
+        </p>
       </div>
+
 
       {/* Bento KPI Row (4 Cards) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -309,137 +294,10 @@ export default function MyFarmPage() {
       </div>
 
       {/* Main Dual-Column Section (8 cols / 4 cols) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         
-        {/* LEFT COLUMN: 8 cols (Inventario y Monitoreo de Bovinos) */}
-        <div className="lg:col-span-8 bg-white rounded-2xl border border-[#E2E8E5] shadow-sm p-6 flex flex-col gap-5">
-          
-          {/* Header de la Tabla con Filtros */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EEF2F0]">
-            <div>
-              <h2 className="text-base font-extrabold text-[#0D1F1B]">
-                Inventario y Monitoreo de Bovinos en Lote
-              </h2>
-              <span className="text-xs text-gray-500 mt-0.5 block">
-                Trazabilidad biométrica individual con arete oficial ICA y control de pesaje
-              </span>
-            </div>
-
-            {/* Tabs de Filtro */}
-            <div className="inline-flex p-1 rounded-xl bg-[#F0F4F2] text-xs font-bold shrink-0 gap-1 text-[#62736C]">
-              <button
-                type="button"
-                onClick={() => setSelectedFilter("all")}
-                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
-                  selectedFilter === "all" ? "bg-white text-[#006244] shadow-sm" : "hover:text-[#0D1F1B]"
-                }`}
-              >
-                Todos ({cattleList.length})
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedFilter("optimal")}
-                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
-                  selectedFilter === "optimal" ? "bg-white text-[#006244] shadow-sm" : "hover:text-[#0D1F1B]"
-                }`}
-              >
-                Óptimo (≥480kg)
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedFilter("review")}
-                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
-                  selectedFilter === "review" ? "bg-white text-[#006244] shadow-sm" : "hover:text-[#0D1F1B]"
-                }`}
-              >
-                Revisión (&lt;480kg)
-              </button>
-            </div>
-          </div>
-
-          {/* Tabla Responsive de Bovinos */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr className="border-b border-[#EEF2F0] text-gray-500 font-bold">
-                  <th className="py-3 px-2">Bovino / Arete</th>
-                  <th className="py-3 px-2">Raza & Etapa</th>
-                  <th className="py-3 px-2">Peso Inicial → Actual</th>
-                  <th className="py-3 px-2">Ganancia Quincenal</th>
-                  <th className="py-3 px-2">Sanidad</th>
-                  <th className="py-3 px-2 text-right">Acción</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#EEF2F0]">
-                {filteredCattle.map((b) => (
-                  <tr key={b.id} className="hover:bg-[#F9FBFA] transition-colors">
-                    <td className="py-3.5 px-2">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-lg bg-[#E8F3EE] flex items-center justify-center text-[#006244] font-bold text-xs shrink-0">
-                          {b.id}
-                        </div>
-                        <div>
-                          <div className="font-extrabold text-[#0D1F1B]">{b.tag}</div>
-                          <div className="text-[10px] text-gray-400 font-mono">RFID: {b.rfid}</div>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td className="py-3.5 px-2">
-                      <div className="font-bold text-[#0D1F1B]">{b.breed}</div>
-                      <div className="text-[11px] text-gray-500">{b.stage}</div>
-                    </td>
-
-                    <td className="py-3.5 px-2">
-                      <div className="font-bold text-[#0D1F1B]">
-                        {b.initialWeight} kg → <span className="text-[#006244] font-extrabold">{b.currentWeight} kg</span>
-                      </div>
-                      <div className="text-[11px] text-[#059669] font-semibold">+{b.gainNet} kg netos</div>
-                    </td>
-
-                    <td className="py-3.5 px-2">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E8F5E9] text-[#006244] font-bold text-[11px]">
-                        ▲ +{b.gainBiweekly} kg
-                      </span>
-                    </td>
-
-                    <td className="py-3.5 px-2">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E0F2FE] text-[#0369A1] font-semibold text-[11px]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#0284C7]"></span>
-                        {b.health}
-                      </span>
-                    </td>
-
-                    <td className="py-3.5 px-2 text-right">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenWeightModal(b)}
-                        className="px-3 py-1.5 rounded-lg bg-[#063B32] hover:bg-[#042822] text-white font-bold text-xs transition-colors cursor-pointer"
-                      >
-                        Registrar Pesaje
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Table Footer */}
-          <div className="pt-3 border-t border-[#EEF2F0] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-gray-500">
-            <span>Mostrando {filteredCattle.length} de {cattleList.length} bovinos auditados en finca</span>
-            <button
-              type="button"
-              onClick={() => setAddBovineModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#F0F4F2] hover:bg-[#E2E8E5] text-[#006244] font-bold transition-colors cursor-pointer"
-            >
-              <span>+ Agregar Bovino a la Manga</span>
-            </button>
-          </div>
-        </div>
-
         {/* RIGHT COLUMN: 4 cols (Báscula IoT & Ficha del Predio) */}
-        <div className="lg:col-span-4 flex flex-col gap-6">
+        <div className="contents">
           
           {/* Card A: Báscula IoT en Manga */}
           <div className="p-6 rounded-2xl bg-white border border-[#E2E8E5] shadow-sm flex flex-col gap-4">
@@ -639,17 +497,17 @@ export default function MyFarmPage() {
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setWeightModalOpen(false)}
-                  className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl cursor-pointer text-center"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-[#063B32] hover:bg-[#042822] rounded-xl cursor-pointer"
+                  className="w-full sm:w-auto px-5 py-2.5 text-xs font-bold text-white bg-[#063B32] hover:bg-[#042822] rounded-xl cursor-pointer text-center"
                 >
                   Guardar Pesaje
                 </button>
@@ -702,17 +560,17 @@ export default function MyFarmPage() {
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-3">
+              <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-3">
                 <button
                   type="button"
                   onClick={() => setAddBovineModalOpen(false)}
-                  className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl cursor-pointer text-center"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-[#063B32] hover:bg-[#042822] rounded-xl cursor-pointer"
+                  className="w-full sm:w-auto px-5 py-2.5 text-xs font-bold text-white bg-[#063B32] hover:bg-[#042822] rounded-xl cursor-pointer text-center"
                 >
                   Agregar a la Manga
                 </button>

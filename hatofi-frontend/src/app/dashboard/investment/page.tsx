@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Lot {
   id: string;
@@ -119,6 +119,13 @@ export default function InvestmentPage() {
     showToast(`✓ Inversión de $${amountUsdc.toLocaleString()} USDC confirmada en ${selectedLot.name}. Tokens de sindicación emitidos.`);
   };
 
+  // Escuchar evento personalizado desde el sidebar para abrir simulador
+  useEffect(() => {
+    const handleOpenSim = () => setSimulateModalOpen(true);
+    window.addEventListener("open-simulate-modal", handleOpenSim);
+    return () => window.removeEventListener("open-simulate-modal", handleOpenSim);
+  }, []);
+
   return (
     <div className="flex flex-col gap-6 w-full">
       
@@ -132,37 +139,14 @@ export default function InvestmentPage() {
         </div>
       )}
 
-      {/* Top Header & Breadcrumb */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div className="flex flex-col gap-1.5 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8F3EE] text-[#006244] text-xs font-bold w-fit border border-[#CCE3D8]">
-            <span className="w-2 h-2 rounded-full bg-[#10B981]"></span>
-            <span>Mercado Soroban v2.1 • Bóvedas de Custodia RWA</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0D1F1B] tracking-tight">
-            Mercado Primario de Inversión Pecuaria RWA
-          </h1>
-          <p className="text-xs sm:text-sm text-[#5D6B66] leading-relaxed">
-            Financia lotes certificados de terneros de ceba con garantías prendarias verificadas por ICA y liquidación autónoma mediante contratos inteligentes en Stellar Soroban.
-          </p>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2.5 self-start lg:self-center shrink-0">
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedLot(lots[0]);
-              setSimulateModalOpen(true);
-            }}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#063B32] hover:bg-[#042822] text-white transition-all shadow-sm text-xs font-bold cursor-pointer"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 3v18h18" /><path d="m19 9-5 5-4-4-3 3" />
-            </svg>
-            <span>Simular Inversión RWA</span>
-          </button>
-        </div>
+      {/* Top Header Limpio */}
+      <div className="flex flex-col gap-1.5 max-w-3xl">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0D1F1B] tracking-tight">
+          Mercado Primario de Inversión Pecuaria RWA
+        </h1>
+        <p className="text-xs sm:text-sm text-[#5D6B66] leading-relaxed">
+          Financia lotes certificados de terneros de ceba con garantías prendarias verificadas por ICA y liquidación autónoma mediante contratos inteligentes en Stellar Soroban.
+        </p>
       </div>
 
       {/* KPI Bento Row (4 Cards) */}
@@ -288,34 +272,36 @@ export default function InvestmentPage() {
             </p>
           </div>
 
-          <div className="inline-flex p-1 rounded-xl bg-[#F0F4F2] text-xs font-bold shrink-0 gap-1 text-[#62736C]">
-            <button
-              type="button"
-              onClick={() => setSelectedCategory("all")}
-              className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
-                selectedCategory === "all" ? "bg-white text-[#006244] shadow-sm" : "hover:text-[#0D1F1B]"
-              }`}
-            >
-              Todos los Lotes
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedCategory("ceba")}
-              className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
-                selectedCategory === "ceba" ? "bg-white text-[#006244] shadow-sm" : "hover:text-[#0D1F1B]"
-              }`}
-            >
-              Ceba Intensiva
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedCategory("cria")}
-              className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
-                selectedCategory === "cria" ? "bg-white text-[#006244] shadow-sm" : "hover:text-[#0D1F1B]"
-              }`}
-            >
-              Cría & Levante
-            </button>
+          <div className="overflow-x-auto max-w-full pb-1 sm:pb-0">
+            <div className="inline-flex p-1 rounded-xl bg-[#F0F4F2] text-xs font-bold shrink-0 gap-1 text-[#62736C]">
+              <button
+                type="button"
+                onClick={() => setSelectedCategory("all")}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+                  selectedCategory === "all" ? "bg-white text-[#006244] shadow-sm" : "hover:text-[#0D1F1B]"
+                }`}
+              >
+                Todos los Lotes
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedCategory("ceba")}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+                  selectedCategory === "ceba" ? "bg-white text-[#006244] shadow-sm" : "hover:text-[#0D1F1B]"
+                }`}
+              >
+                Ceba Intensiva
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedCategory("cria")}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+                  selectedCategory === "cria" ? "bg-white text-[#006244] shadow-sm" : "hover:text-[#0D1F1B]"
+                }`}
+              >
+                Cría & Levante
+              </button>
+            </div>
           </div>
         </div>
 
@@ -472,17 +458,17 @@ export default function InvestmentPage() {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setSimulateModalOpen(false)}
-                  className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl cursor-pointer text-center"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 text-xs font-bold text-white bg-[#063B32] hover:bg-[#042822] rounded-xl cursor-pointer shadow-md"
+                  className="w-full sm:w-auto px-5 py-2.5 text-xs font-bold text-white bg-[#063B32] hover:bg-[#042822] rounded-xl cursor-pointer shadow-md text-center"
                 >
                   Confirmar Inversión en Soroban
                 </button>
