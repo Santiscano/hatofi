@@ -21,19 +21,24 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [userAccount, setUserAccount] = useState(isGanadero ? "Hacienda La Palmira" : "0x8F2d...c3Ea");
 
   useEffect(() => {
-    try {
-      const session = localStorage.getItem("hatofi_session");
-      if (session) {
-        const parsed = JSON.parse(session);
-        if (parsed.name) setUserName(parsed.name);
-        if (parsed.account) setUserAccount(parsed.account);
-      } else {
-        setUserName(isGanadero ? "Carlos Mendoza" : "Mauricio Echeverry");
-        setUserAccount(isGanadero ? "Hacienda La Palmira" : "0x8F2d...c3Ea");
+    const timeoutId = window.setTimeout(() => {
+      try {
+        const session = localStorage.getItem("hatofi_session");
+        if (session) {
+          const parsed = JSON.parse(session);
+          if (parsed.name) setUserName(parsed.name);
+          if (parsed.account) setUserAccount(parsed.account);
+        } else {
+          setUserName(isGanadero ? "Carlos Mendoza" : "Mauricio Echeverry");
+          setUserAccount(isGanadero ? "Hacienda La Palmira" : "0x8F2d...c3Ea");
+        }
+      } catch {
+        // Mantener los valores iniciales si la sesión almacenada no es válida.
       }
-    } catch {
-      // fallback
-    }
+
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
   }, [isGanadero]);
 
   const handleLogout = () => {
