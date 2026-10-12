@@ -39,6 +39,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const handleLogout = () => {
     try {
       localStorage.removeItem("hatofi_session");
+      localStorage.removeItem("hatofi_access_token");
     } catch {}
     router.push("/login");
   };
