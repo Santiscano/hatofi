@@ -129,6 +129,28 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       ),
     },
     {
+      href: "/dashboard/register-farm",
+      label: "Registrar Finca",
+      available: true,
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 21h18M5 21V10l7-5 7 5v11" />
+          <path d="M12 10v6M9 13h6" />
+        </svg>
+      ),
+    },
+    {
+      href: "/dashboard/create-batch",
+      label: "Crear Lote",
+      available: true,
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 19.5V5.8a1.8 1.8 0 0 1 1.8-1.8h12.4A1.8 1.8 0 0 1 20 5.8v13.7" />
+          <path d="M4 19.5c0-1.1.9-2 2-2h14M12 7v7M8.5 10.5h7" />
+        </svg>
+      ),
+    },
+    {
       href: "/dashboard/cattle",
       label: "Inventario Bovino",
       available: true,

@@ -1,187 +1,126 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-
-export interface Bovine {
-  id: string;
-  tag: string;
-  rfid: string;
-  breed: string;
-  stage: string;
-  initialWeight: number;
-  currentWeight: number;
-  gainNet: number;
-  gainBiweekly: number;
-  health: string;
-}
-
-type CattleFilter = "all" | "optimal" | "review";
-
-const initialCattle: Bovine[] = [
-  {
-    id: "01",
-    tag: "#ICA-001",
-    rfid: "982.000.412.981",
-    breed: "Brahman x Angus",
-    stage: "24 meses • Mes 8 de 10",
-    initialWeight: 210,
-    currentWeight: 486.4,
-    gainNet: 276.4,
-    gainBiweekly: 14.2,
-    health: "Vacunado / Óptimo",
-  },
-  {
-    id: "02",
-    tag: "#ICA-002",
-    rfid: "982.000.412.982",
-    breed: "Nelore Comercial",
-    stage: "23 meses • Mes 8 de 10",
-    initialWeight: 205,
-    currentWeight: 478.0,
-    gainNet: 273.0,
-    gainBiweekly: 12.8,
-    health: "Vacunado / Óptimo",
-  },
-  {
-    id: "03",
-    tag: "#ICA-003",
-    rfid: "982.000.412.983",
-    breed: "Brahman Puro",
-    stage: "25 meses • Mes 8 de 10",
-    initialWeight: 220,
-    currentWeight: 492.5,
-    gainNet: 272.5,
-    gainBiweekly: 15.5,
-    health: "Vacunado / Óptimo",
-  },
-  {
-    id: "04",
-    tag: "#ICA-004",
-    rfid: "982.000.412.984",
-    breed: "Brangus Colorado",
-    stage: "24 meses • Mes 8 de 10",
-    initialWeight: 215,
-    currentWeight: 489.1,
-    gainNet: 274.1,
-    gainBiweekly: 13.6,
-    health: "Vacunado / Óptimo",
-  },
-];
+import { useEffect, useMemo, useState } from "react";
+import { getFarms, type Farm } from "@/lib/farm-api";
+import { createBatch, getBatchesByFarm, updateBatch, updateBatchStatus, type Batch, type BatchCreatePayload, type BatchStatus, type BatchUpdatePayload } from "@/lib/batch-api";
 
 export function useMyFarm() {
-  const [cattleList, setCattleList] = useState<Bovine[]>(initialCattle);
-  const [selectedFilter, setSelectedFilter] = useState<CattleFilter>("all");
-  const [weightModalOpen, setWeightModalOpen] = useState(false);
-  const [selectedBovine, setSelectedBovine] = useState<Bovine | null>(null);
-  const [newWeightInput, setNewWeightInput] = useState("");
-  const [toastMessage, setToastMessage] = useState("");
-  const [newBatchModalOpen, setNewBatchModalOpen] = useState(false);
-  const [addBovineModalOpen, setAddBovineModalOpen] = useState(false);
-  const [newTag, setNewTag] = useState("#ICA-005");
-  const [newBreed, setNewBreed] = useState("Brahman x Simmental");
-  const [newWeight, setNewWeight] = useState("225");
-
-  const showToast = (message: string) => {
-    setToastMessage(message);
-    setTimeout(() => setToastMessage(""), 4000);
-  };
-
-  const filteredCattle = cattleList.filter((bovine) => {
-    if (selectedFilter === "optimal") return bovine.currentWeight >= 480;
-    if (selectedFilter === "review") return bovine.currentWeight < 480;
-    return true;
-  });
-
-  const handleOpenWeightModal = (bovine: Bovine) => {
-    setSelectedBovine(bovine);
-    setNewWeightInput((bovine.currentWeight + 2.5).toFixed(1));
-    setWeightModalOpen(true);
-  };
-
-  const handleSaveWeight = (event: FormEvent) => {
-    event.preventDefault();
-    if (!selectedBovine) return;
-    const value = parseFloat(newWeightInput);
-    if (isNaN(value) || value <= 0) return;
-
-    setCattleList((previousCattle) =>
-      previousCattle.map((bovine) => {
-        if (bovine.id === selectedBovine.id) {
-          const difference = value - bovine.currentWeight;
-          return {
-            ...bovine,
-            currentWeight: value,
-            gainNet: parseFloat((bovine.gainNet + difference).toFixed(1)),
-            gainBiweekly: parseFloat((bovine.gainBiweekly + difference).toFixed(1)),
-          };
-        }
-        return bovine;
-      }),
-    );
-
-    setWeightModalOpen(false);
-    showToast(`✓ Pesaje telemétrico registrado para ${selectedBovine.tag}: ${value} kg.`);
-  };
-
-  const handleAddBovine = (event: FormEvent) => {
-    event.preventDefault();
-    const weight = parseFloat(newWeight) || 220;
-    const newBovine: Bovine = {
-      id: String(cattleList.length + 1).padStart(2, "0"),
-      tag: newTag,
-      rfid: `982.000.412.98${cattleList.length + 5}`,
-      breed: newBreed,
-      stage: "22 meses • Mes 1 de 10",
-      initialWeight: weight,
-      currentWeight: weight,
-      gainNet: 0,
-      gainBiweekly: 0,
-      health: "Vacunado / Óptimo",
-    };
-    setCattleList([...cattleList, newBovine]);
-    setAddBovineModalOpen(false);
-    showToast(`✓ Bovino ${newTag} incorporado con arete RFID a la manga.`);
-  };
+  const [farms, setFarms] = useState<Farm[]>([]);
+  const [selectedFarmId, setSelectedFarmId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [batches, setBatches] = useState<Batch[]>([]);
+  const [batchesLoading, setBatchesLoading] = useState(false);
+  const [batchError, setBatchError] = useState("");
+  const [batchStatus, setBatchStatus] = useState<BatchStatus | "ALL">("ALL");
+  const [creatingBatch, setCreatingBatch] = useState(false);
 
   useEffect(() => {
-    const handleDownloadCert = () =>
-      showToast("Descargando Certificado Oficial ICA SIGMA #84920-CO en PDF...");
-    const handleNewBatch = () => setNewBatchModalOpen(true);
-
-    window.addEventListener("download-ica-cert", handleDownloadCert);
-    window.addEventListener("open-new-batch-modal", handleNewBatch);
+    let active = true;
+    getFarms()
+      .then((loadedFarms) => {
+        if (!active) return;
+        setFarms(loadedFarms);
+        setSelectedFarmId(loadedFarms[0]?.id ?? null);
+      })
+      .catch((loadError) => {
+        if (active) {
+          setError(loadError instanceof Error ? loadError.message : "No fue posible cargar tus fincas.");
+        }
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
 
     return () => {
-      window.removeEventListener("download-ica-cert", handleDownloadCert);
-      window.removeEventListener("open-new-batch-modal", handleNewBatch);
+      active = false;
     };
   }, []);
 
+  useEffect(() => {
+    if (selectedFarmId === null) {
+      return;
+    }
+
+    let active = true;
+    void Promise.resolve().then(() => {
+      if (active) {
+        setBatchesLoading(true);
+        setBatchError("");
+      }
+    });
+    getBatchesByFarm(selectedFarmId)
+      .then((loadedBatches) => {
+        if (active) setBatches(loadedBatches);
+      })
+      .catch((loadError) => {
+        if (active) {
+          setBatches([]);
+          setBatchError(loadError instanceof Error ? loadError.message : "No fue posible cargar los lotes.");
+        }
+      })
+      .finally(() => {
+        if (active) setBatchesLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [selectedFarmId]);
+
+  const selectedFarm = useMemo(
+    () => farms.find((farm) => farm.id === selectedFarmId) ?? null,
+    [farms, selectedFarmId],
+  );
+
+  const visibleBatches = useMemo(
+    () => batchStatus === "ALL" ? batches : batches.filter((batch) => batch.status === batchStatus),
+    [batchStatus, batches],
+  );
+
+  const handleCreateBatch = async (payload: BatchCreatePayload) => {
+    setCreatingBatch(true);
+    setBatchError("");
+    try {
+      const createdBatch = await createBatch(payload);
+      setBatches((currentBatches) => [createdBatch, ...currentBatches]);
+    } catch (createError) {
+      const message = createError instanceof Error ? createError.message : "No fue posible crear el lote.";
+      setBatchError(message);
+      throw createError;
+    } finally {
+      setCreatingBatch(false);
+    }
+  };
+
+  const handleUpdateBatch = async (batchId: number, payload: BatchUpdatePayload) => {
+    const updatedBatch = await updateBatch(batchId, payload);
+    setBatches((currentBatches) => currentBatches.map((batch) => batch.id === batchId ? updatedBatch : batch));
+    return updatedBatch;
+  };
+
+  const handleUpdateBatchStatus = async (batchId: number, status: BatchStatus) => {
+    const updatedBatch = await updateBatchStatus(batchId, status);
+    setBatches((currentBatches) => currentBatches.map((batch) => batch.id === batchId ? updatedBatch : batch));
+    return updatedBatch;
+  };
+
   return {
-    cattleList,
-    selectedFilter,
-    setSelectedFilter,
-    weightModalOpen,
-    setWeightModalOpen,
-    selectedBovine,
-    newWeightInput,
-    setNewWeightInput,
-    toastMessage,
-    setToastMessage,
-    newBatchModalOpen,
-    setNewBatchModalOpen,
-    addBovineModalOpen,
-    setAddBovineModalOpen,
-    newTag,
-    setNewTag,
-    newBreed,
-    setNewBreed,
-    newWeight,
-    setNewWeight,
-    filteredCattle,
-    showToast,
-    handleOpenWeightModal,
-    handleSaveWeight,
-    handleAddBovine,
+    farms,
+    selectedFarm,
+    selectedFarmId,
+    setSelectedFarmId,
+    loading,
+    error,
+    batches,
+    visibleBatches,
+    batchesLoading,
+    batchError,
+    batchStatus,
+    setBatchStatus,
+    creatingBatch,
+    handleCreateBatch,
+    handleUpdateBatch,
+    handleUpdateBatchStatus,
   };
 }
